@@ -71,22 +71,24 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
         t.write(f"\nINSERT_BEGIN:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
     con = mydb.cursor()
-    con.execute("SELECT operador_id FROM smartfleet.message_sent WHERE  form_id BETWEEN 10300 AND 10399 OR form_id BETWEEN 10700 AND 10799 OR form_id BETWEEN 11300 AND 11399 order by create_date desc limit 1")
+    con.execute("SELECT operador_id,id FROM smartfleet.message_sent WHERE  form_id BETWEEN 10300 AND 10399 OR form_id BETWEEN 10700 AND 10799 OR form_id BETWEEN 11300 AND 11399 order by create_date desc limit 1")
     myresult =con.fetchone()
     if myresult:
         operador_ultima_apropriacao = myresult[0]
-           
-   
-    try:
-        sql = "INSERT INTO smartfleet.machine_operation(operador_id,volume_total,quantidade_arvores,cons_combus,temp_motor,distancia,temp_motor_maquina,distancia_maquina,cons_combus_maquina,create_date)VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,SYSDATE());"
-        val = (str(operador_ultima_apropriacao),str(operacoes['volume_total']),str(operacoes['numero_arvores']),str(operacoes['consumo_combustivel']),str(operacoes['engine_time']),str(operacoes['distancia']),str(total_da_maquina['machineenginetime']),str(total_da_maquina['machinedrivendistance']),str(total_da_maquina['machinefuelconsumption']))
-        con = mydb.cursor()
-        con.execute(sql,val)
-        mydb.commit()
-        mydb.close()
-    except mysql.connector.Error as err:
-        log("INSERT_ERROR:"+err.msg)
-    with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
-        t.write(f"\nINSERT_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
-    remove(arquivo)
+        id_ultima_desapropriacao = myresult[1]
+        apagar_arquivo = True
+        try:
+            sql = "INSERT INTO smartfleet.machine_operation(operator_id,message_sent_id,total_volume,harvestedstems,fuelconsumption,enginetime,drivendistance,machine_enginetime,machine_drivendistance,machine_fuelconsumption,created_at)VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,SYSDATE());"
+            val = (str(operador_ultima_apropriacao),str(id_ultima_desapropriacao),str(operacoes['volume_total']),str(operacoes['numero_arvores']),str(operacoes['consumo_combustivel']),str(operacoes['engine_time']),str(operacoes['distancia']),str(total_da_maquina['machineenginetime']),str(total_da_maquina['machinedrivendistance']),str(total_da_maquina['machinefuelconsumption']))
+            con = mydb.cursor()
+            con.execute(sql,val)
+            mydb.commit()
+            mydb.close()
+        except mysql.connector.Error as err:
+            apagar_arquivo = False
+            log("INSERT_ERROR:"+err.msg)
+        with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
+            t.write(f"\nINSERT_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+        if apagar_arquivo:
+            remove(arquivo)
 # leitura_de_arquivo_mom('C:/Users/Javier Ferreira/Desktop/mom/','FLORESTAL_BARRA_01-060122-180129.mom')
