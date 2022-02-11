@@ -1,8 +1,7 @@
-from pandas.core import base
 from cx_Freeze import setup, Executable
 import sys
 
-build_exe_option = {"packages":["os","sched","time","datetime","mysql.connector","bs4","shutil","json","pandas"]}
+build_exe_option = {"packages":["os","sched","time","datetime","mysql.connector","bs4","shutil","json"]}
 
 # ada
 base = None
