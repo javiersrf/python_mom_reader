@@ -23,9 +23,9 @@ def app():
     if arquivo_mom_valido:
         resultado_final = leitura_de_arquivo_mom(arquivo_mom_valido)
     
-    event_schedule.enter(20, 1, app,)
+    event_schedule.enter(2, 1, app,)
 # app()
    
     
-event_schedule.enter(20, 1, app,)
+event_schedule.enter(2, 1, app,)
 event_schedule.run()
