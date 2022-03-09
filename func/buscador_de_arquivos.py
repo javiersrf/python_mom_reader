@@ -34,6 +34,6 @@ def get_arquivo_mom():
             resultado.append(CaminhoDoArquivo(caminho=arquivo,data_criado=data_criacao,data_atualizado=data_atualizado))
     resultado.sort(key=myFunc,reverse=True,)
     if resultado:
-        return resultado[0].caminho
+        return [result.caminho for result in resultado]
     return None 
 

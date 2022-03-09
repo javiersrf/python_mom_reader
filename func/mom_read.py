@@ -1,5 +1,5 @@
 
-from os import error,remove
+
 from bs4 import BeautifulSoup
 import mysql.connector
 import datetime
@@ -16,6 +16,7 @@ def str_to_datetime(data:str):
 def leitura_de_arquivo_mom(arquivo_x:str):
     with open("registros/"+arquivo_x[:-4]+".txt",'w+') as t:
         t.write(f"\nFILE_OPENED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+    
     caminho= 'C:/prd/'
     arquivo = caminho + arquivo_x
     with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
@@ -38,9 +39,9 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     '''
     registrando os operadorres
     '''
-    operadores_nos = soup.find_all('operatordefinition')
-    operacoes={"volume_total":0.0,"numero_arvores":0.0,"consumo_combustivel":0.0,"engine_time":0.0,"distancia":0.0}
-        
+    # operadores_nos = soup.find_all('operatordefinition')
+    # operacoes={"volume_total":0.0,"numero_arvores":0.0,"consumo_combustivel":0.0,"engine_time":0.0,"distancia":0.0}
+    
     '''
     valores totais da maquina
     '''
@@ -69,13 +70,16 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
         t.write(f"\nREAD_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
 
+    
     '''
     Ordenando os registro para qual foi o ultimo
     '''
     mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
     con = mydb.cursor()
     operadores.sort(key=ordenar_po_data)
+
     for operacao_registro in operadores:
+        
         ultima_operacao = operacao_registro
         data_da_ultima_operacao = str_to_datetime(ultima_operacao["dtgerado"])
         '''
@@ -102,5 +106,5 @@ def leitura_de_arquivo_mom(arquivo_x:str):
                     t.write(f"\nINSERT_ERROR:{arquivo_x[:-4]} : {err}")
                 with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
                     t.write(f"\nINSERT_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+    
     mydb.close()
-# leitura_de_arquivo_mom('FLORESTAL_BARRA_01-060122-180129.mom')

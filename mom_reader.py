@@ -20,8 +20,11 @@ def app():
     # Funcao que verifica quais arquivos devem ser lidos e tradados
     # aqui devera ser implementado a funcao que define se o arquivo é novo ou não
     arquivo_mom_valido = get_arquivo_mom()
+    
     if arquivo_mom_valido:
-        resultado_final = leitura_de_arquivo_mom(arquivo_mom_valido)
+        
+        for x in arquivo_mom_valido:
+            leitura_de_arquivo_mom(x)
     
     event_schedule.enter(2, 1, app,)
 # app()
