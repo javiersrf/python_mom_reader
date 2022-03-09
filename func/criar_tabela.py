@@ -4,10 +4,10 @@ import os
 def criar_tabela_caso_nao_exista():
     if not os.path.exists('C:/prd'):
         os.mkdir('C:/prd')
-    if not os.path.exists('./registros'):
-        os.mkdir('./registros')
-    if not os.path.exists('./log'):
-        os.mkdir('./log')
+    # if not os.path.exists('./registros'):
+    #     os.mkdir('./registros')
+    # if not os.path.exists('./log'):
+    #     os.mkdir('./log')
     try:
         mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
         con = mydb.cursor()

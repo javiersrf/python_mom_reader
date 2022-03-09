@@ -14,13 +14,13 @@ def str_to_datetime(data:str):
     return datetime.datetime.strptime("".join(new_str),"%Y-%m-%dT%H:%M:%S%z").replace(tzinfo=None)
 
 def leitura_de_arquivo_mom(arquivo_x:str):
-    with open("registros/"+arquivo_x[:-4]+".txt",'w+') as t:
-        t.write(f"\nFILE_OPENED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+    # with open("registros/"+arquivo_x[:-4]+".txt",'w+') as t:
+    #     t.write(f"\nFILE_OPENED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
     
     caminho= 'C:/prd/'
     arquivo = caminho + arquivo_x
-    with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
-        t.write(f"\nREAD_BEGIN:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+    # with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
+    #     t.write(f"\nREAD_BEGIN:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
     operadores = [] 
     total_da_maquina = {}
     '''
@@ -64,13 +64,12 @@ def leitura_de_arquivo_mom(arquivo_x:str):
             nova_operacao["dtgerado"]=str(trabalho.monitoringstarttime.string)
             operadores.append(nova_operacao)
             
-    with open("log/logmom.txt",'a+') as t:
-        t.write(f"\n{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+    # with open("log/logmom.txt",'a+') as t:
+    #     t.write(f"\n{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
 
-    with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
-        t.write(f"\nREAD_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
-
-    
+    # with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
+    #     t.write(f"\nREAD_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+   
     '''
     Ordenando os registro para qual foi o ultimo
     '''
@@ -88,8 +87,8 @@ def leitura_de_arquivo_mom(arquivo_x:str):
         con.execute(f"SELECT created_at FROM smartfleet.machine_operation where created_at ='{data_da_ultima_operacao.strftime('%Y-%m-%d %H:%M:%S')}'  order by created_at desc limit 1")
         myresult =con.fetchone()
         if myresult == None:
-            with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
-                t.write(f"\nINSERT_BEGIN:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+            # with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
+            #     t.write(f"\nINSERT_BEGIN:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
             
             con.execute("SELECT operador_id,id FROM smartfleet.message_sent WHERE  form_id BETWEEN 10300 AND 10399 OR form_id BETWEEN 10700 AND 10799 OR form_id BETWEEN 11300 AND 11399 order by create_date desc limit 1")
             myresult =con.fetchone()
@@ -103,8 +102,9 @@ def leitura_de_arquivo_mom(arquivo_x:str):
                     mydb.commit()
                     
                 except mysql.connector.Error as err:
-                    t.write(f"\nINSERT_ERROR:{arquivo_x[:-4]} : {err}")
-                with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
-                    t.write(f"\nINSERT_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
+                    pass
+                    # t.write(f"\nINSERT_ERROR:{arquivo_x[:-4]} : {err}")
+                # with open("registros/"+arquivo_x[:-4]+".txt",'a+') as t:
+                #     t.write(f"\nINSERT_COMPLETED:{arquivo_x[:-4]} : {str(datetime.datetime.now())}")
     
     mydb.close()
