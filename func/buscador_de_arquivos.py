@@ -1,4 +1,5 @@
 import os
+import mysql.connector
 class CaminhoDoArquivo:
     def __init__(self,caminho,data_criado,data_atualizado):
         self.caminho = caminho
@@ -23,6 +24,13 @@ def get_arquivos_hpr(caminho:str):
 def myFunc(e):
   return e.data_atualizado
 def get_arquivo_mom():
+
+    try:
+        mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
+        con = mydb.cursor()
+        mydb.close()
+    except :
+        return None
     caminho = 'C:/prd/'
     resultado = []
     arquivos =os.listdir(caminho)

@@ -10,9 +10,6 @@ event_schedule = sched.scheduler(time.time, time.sleep)
 
 
 def app():
-
-    criar_tabela_caso_nao_exista()
-
     log("EXEC_TIME")
     '''
     criar tabela para registro caso nao haja uma
