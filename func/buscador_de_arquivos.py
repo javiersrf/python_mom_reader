@@ -24,7 +24,6 @@ def get_arquivos_hpr(caminho:str):
 def myFunc(e):
   return e.data_atualizado
 def get_arquivo_mom():
-
     try:
         mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
         con = mydb.cursor()

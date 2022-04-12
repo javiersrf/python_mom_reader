@@ -13,7 +13,7 @@ if sys.platform == "win32":
 
 setup(
     name="mom_reader",
-    version='0.0.4',
+    version='0.0.5',
     description ='Tradutor de arquivos mom',
     options = {"build_exe":build_exe_option},
     executables = [Executable("mom_reader.py",base=base)]
