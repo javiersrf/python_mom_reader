@@ -27,6 +27,12 @@ def get_arquivo_mom():
     try:
         mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
         con = mydb.cursor()
+        sql_1 = "SELECT read_mom_status FROM smartfleet.reading_status ORDER BY updated_at DESC LIMIT 1;"
+        con.execute(sql_1)
+        status_de_leitura = con.fetchone()
+        if status_de_leitura !=None:
+            if status_de_leitura[0] == 1:
+                return None
         mydb.close()
     except :
         return None
