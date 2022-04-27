@@ -18,6 +18,12 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     arquivo = caminho + arquivo_x
     operadores = [] 
     total_da_maquina = {}
+    mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
+    con = mydb.cursor()
+    sql = "UPDATE smartfleet.reading_status SET read_mom_status = 1 where 1=1;"
+    con.execute(sql)
+    mydb.commit()
+    mydb.close()
     '''
     Aqui abrimos o caminho passado como uma  arquivo para o python conseguir interpreta-lo
     '''
