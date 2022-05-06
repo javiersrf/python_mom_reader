@@ -90,4 +90,7 @@ def leitura_de_arquivo_mom(arquivo_x:str):
                     
                 except mysql.connector.Error as err:
                     pass
+    sql = "UPDATE smartfleet.reading_status SET read_mom_status = 0, updated_at = current_date() where 1=1;"
+    con.execute(sql)
+    mydb.commit()
     mydb.close()
