@@ -1,7 +1,7 @@
 from bs4 import BeautifulSoup
 import mysql.connector
 import datetime
-
+import os
 def ordenar_po_data(dicionario:dict):
     new_str = list(dicionario["dtgerado"])
     new_str[22] = ""
@@ -92,3 +92,8 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     con.execute(sql)
     mydb.commit()
     mydb.close()
+    try:
+        os.remove(arquivo)
+    except:
+        pass
+
