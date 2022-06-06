@@ -1,5 +1,6 @@
 import os
 import mysql.connector
+from .env import LOG_LOCAL, MAIN_LOCAL
 class CaminhoDoArquivo:
     def __init__(self,caminho,data_criado,data_atualizado):
         self.caminho = caminho
@@ -21,22 +22,23 @@ def get_arquivos_hpr(caminho:str):
         
 
     return resultado 
-def myFunc(e):
+def my_func(e):
   return e.data_atualizado
 def get_arquivo_mom():
+    if not os.path.isdir(LOG_LOCAL):
+        os.makedirs(LOG_LOCAL)
     try:
         mydb = mysql.connector.connect(host="localhost", user="smartfleet", password="smartkey",database="smartfleet")
         con = mydb.cursor()
         sql_1 = "SELECT read_mom_status FROM smartfleet.reading_status ORDER BY updated_at DESC LIMIT 1;"
         con.execute(sql_1)
         status_de_leitura = con.fetchone()
-        if status_de_leitura !=None:
-            if status_de_leitura[0] == 1:
-                return None
+        if status_de_leitura !=None and status_de_leitura[0] == 1:
+            return None
         mydb.close()
-    except :
+    except Exception as e:
         return None
-    caminho = 'C:/prd/'
+    caminho = MAIN_LOCAL
     resultado = []
     arquivos =os.listdir(caminho)
     
@@ -45,7 +47,7 @@ def get_arquivo_mom():
         data_atualizado = os.path.getmtime(caminho+arquivo)
         if arquivo.endswith(".mom") :
             resultado.append(CaminhoDoArquivo(caminho=arquivo,data_criado=data_criacao,data_atualizado=data_atualizado))
-    resultado.sort(key=myFunc,reverse=True,)
+    resultado.sort(key=my_func,reverse=True,)
     if resultado:
         return [result.caminho for result in resultado]
     return None 
