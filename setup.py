@@ -1,7 +1,7 @@
 from cx_Freeze import setup, Executable
 import sys
 
-build_exe_option = {"packages":["os","sched","time","datetime","mysql.connector","lxml","bs4","shutil","json"]}
+build_exe_option = {"packages":["os", "sched", "time", "datetime", "mysql.connector", "lxml", "bs4", "shutil", "json", "logging"]}
 
 # ada
 base = None
