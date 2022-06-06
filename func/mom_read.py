@@ -130,6 +130,7 @@ def leitura_de_arquivo_mom(arquivo_x:str):
                     logging.exception(msg= excpt)
             else:
                 logging.info("Any last operator apropriation")
+    logging.info("Ending insert database info")
     sql = "UPDATE smartfleet.reading_status SET read_mom_status = 0, updated_at = current_date() where 1=1;"
     try:
         con.execute(sql)
@@ -143,4 +144,7 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     except Exception as excpt:
         logging.error("Error on remove mom file")
         logging.exception(msg= excpt)
+    finally:
+        logging.info("Ending reading mom file")
+
 

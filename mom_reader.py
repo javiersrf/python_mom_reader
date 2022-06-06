@@ -1,7 +1,6 @@
 from func.mom_read import leitura_de_arquivo_mom
 from func.buscador_de_arquivos import get_arquivo_mom
-import sched,time
-from logfunc.logfunc import log
+import sched, time
 
 
 event_schedule = sched.scheduler(time.time, time.sleep)
@@ -9,7 +8,6 @@ event_schedule = sched.scheduler(time.time, time.sleep)
 
 
 def app():
-    log("EXEC_TIME")
     '''
     criar tabela para registro caso nao haja uma
     '''
