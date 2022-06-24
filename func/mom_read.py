@@ -4,10 +4,13 @@ import datetime
 import os
 import logging
 from .env import LOG_LOCAL, MAIN_LOCAL, M3, DATABASE, DATABASE_PASSWORD, HOST, USER
-def ordenar_po_data(dicionario:dict):
+
+
+def ordenar_por_data(dicionario:dict):
     new_str = list(dicionario["dtgerado"])
     new_str[22] = ""
     return datetime.datetime.strptime("".join(new_str),"%Y-%m-%dT%H:%M:%S%z")
+
 def str_to_datetime(data:str):
     new_str = list(data)
     new_str[22] = ""
@@ -75,7 +78,7 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     valores de trabalho do operador
     '''
     for trabalho in no_trabalho_realizado:
-        if(trabalho.harvesterdata !=None):
+        if(trabalho.harvesterdata != None):
             try:
                 nova_operacao = {}
                 nova_operacao["chave_operador"]= str(trabalho.operatorkey.string)
@@ -85,10 +88,13 @@ def leitura_de_arquivo_mom(arquivo_x:str):
                 nova_operacao["volume_total"]=float(trabalho.harvesterdata.find(harvestedlogsvolumecategory = M3).string)
                 nova_operacao["numero_arvores"]=float(trabalho.harvesterdata.numberofharvestedstems.string)
                 nova_operacao["dtgerado"]=str(trabalho.monitoringstarttime.string)
+                operadores.append(nova_operacao)
             except Exception as excpt:
                 logging.error("Error reading individual machine work time")
                 logging.exception(msg= excpt)
-            operadores.append(nova_operacao)
+        else:
+            logging.debug('No harvester data found')
+            
    
     '''
     Ordenando os registro para qual foi o ultimo
@@ -97,10 +103,12 @@ def leitura_de_arquivo_mom(arquivo_x:str):
     try:
         mydb = mysql.connector.connect(host=HOST, user=USER, password=DATABASE_PASSWORD, database=DATABASE)
         con = mydb.cursor()
+        if operadores:
+            operadores.sort(key=ordenar_por_data)
     except Exception as excpt:
         logging.error("New Mysql connection error")
         logging.exception(msg= excpt)
-    operadores.sort(key=ordenar_po_data)
+    
     logging.info("Starting insert database info")
     for operacao_registro in operadores:
         ultima_operacao = operacao_registro
